@@ -22,7 +22,7 @@ dp = Dispatcher(storage=MemoryStorage())
 router = Router()
 dp.include_router(router)
 
-# Состояния FSM
+
 class AddProductStates(StatesGroup):
     waiting_name = State()
     waiting_desc = State()
@@ -67,7 +67,7 @@ async def init_db():
             )
         ''')
         
-        # Добавляем колонку stars если нет
+
         try:
             await db.execute("ALTER TABLE products ADD COLUMN stars INTEGER DEFAULT 0")
         except:
@@ -227,7 +227,7 @@ async def successful_payment_handler(message: types.Message, state: FSMContext):
             async with db.execute("SELECT name FROM products WHERE id=?", (product_id,)) as cursor:
                 name = (await cursor.fetchone())[0]
             
-            # Уведомление админу
+
             await bot.send_message(ADMIN_ID, 
                 f"🔔 НОВЫЙ ПЛАТЕЖ!\n"
                 f"👤 {message.from_user.first_name} (ID: {message.from_user.id})\n"
@@ -244,7 +244,7 @@ async def successful_payment_handler(message: types.Message, state: FSMContext):
                 .button(text="🏪 Главное", callback_data="main").adjust(1).as_markup()
             )
 
-# АДМИН ПАНЕЛЬ
+
 @router.callback_query(F.data == "admin")
 async def admin_panel(callback: CallbackQuery):
     if callback.from_user.id != ADMIN_ID:
@@ -280,7 +280,7 @@ async def admin_stats(callback: CallbackQuery):
         await callback.message.answer(text, reply_markup=builder.as_markup())
     await callback.answer()
 
-# ✅ ДОБАВЛЕНИЕ ТОВАРА
+
 @router.callback_query(F.data == "admin_add_product")
 async def admin_add_product(callback: CallbackQuery, state: FSMContext):
     if callback.from_user.id != ADMIN_ID: 
@@ -358,7 +358,7 @@ async def add_product_item_data(message: types.Message, state: FSMContext):
         await message.answer("✅ Все добавлено!", reply_markup=get_admin_keyboard())
         await state.clear()
 
-# ✅ ДОБАВЛЕНИЕ ЕДИНИЦ (ИСПРАВЛЕНО!)
+
 @router.callback_query(F.data == "admin_add_item")
 async def admin_add_item(callback: CallbackQuery, state: FSMContext):
     if callback.from_user.id != ADMIN_ID: 
@@ -437,7 +437,6 @@ async def add_item_data(message: types.Message, state: FSMContext):
         await message.answer("✅ Все единицы добавлены!", reply_markup=get_admin_keyboard())
         await state.clear()
 
-# Очистка БД
 @router.callback_query(F.data == "admin_clear")
 async def admin_clear_db(callback: CallbackQuery, state: FSMContext):
     if callback.from_user.id != ADMIN_ID: return
@@ -461,4 +460,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 

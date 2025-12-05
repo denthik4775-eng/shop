@@ -14,8 +14,8 @@ from aiogram.types import (
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 # Настройки
-BOT_TOKEN = "8216114774:AAHvmxCht79fVCFMnM14WqO2FOkBF5QxLx4"  # ← ЗАМЕНИТЕ
-ADMIN_ID = 640876100  # ← ВАШ ID
+BOT_TOKEN = "--------"  # ← ЗАМЕНИТЕ
+ADMIN_ID = -----------  # ← ВАШ ID
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
@@ -461,3 +461,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
